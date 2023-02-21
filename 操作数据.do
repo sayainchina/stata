@@ -340,24 +340,20 @@ drop if iso3num_o == 492
 *双缩尾处理，去掉1%和99%数据
 winsor2 sumprimaryvalue_o sumprimaryvalue_d confirmeddeaths_o confirmeddeaths_d, cut(1 99)
 
+*多维固定效应回归
+reghdfe y x1 x2 x3 , absorb(需要固定的变量)
+
 
 *输出命令
 estfe m1 m2 m3 m4, labels(pair_o "出口方固定效应" pair_d "进口方固定效应" pair "出口方——进口方固定效应" yearmonth "时间固定效应")
 
+*保存输出结果为m1
 est store m1
 
+*输出结果到目录
 esttab m1 m2 m3 m4 using L:\研究生\毕业论文\输出数据\机制性检验.rtf , replace b(%12.3f) se(%12.3f) nogap compress ///  
   s(N r2) star(* 0.1 ** 0.05 *** 0.01) ///
   indicate(`r(indicate_fe)')
 
-  
-  
-  *  indicate("出口方固定效应=*pair_o*" "进口方固定效应=*pair_d*" "出口方——进口方固定效应=*pair*" "时间固定效应=*yearmonth*")
-  
-  
-  reghdfe , absorb(id year)
-  
-  
-  进口国疫情防控政策取对数
-  
-  出口国疫情防控政策取对数
+ 
+
